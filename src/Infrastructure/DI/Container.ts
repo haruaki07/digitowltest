@@ -13,7 +13,7 @@ import { UseCases } from "@/Core/UseCases";
 import { ProductRepository } from "../Data/Repositories/ProductRepository";
 import { IProductRepository } from "@/Core/Common/Interfaces/IProductRepository";
 import { Verify } from "crypto";
-import { VerifyTokenUseCase } from "@/Core/UseCases/VerifyTokenUseCase";
+import { VerifyTokenUseCase } from "@/Core/UseCases/Auth/VerifyTokenUseCase";
 import { GetProductUseCase } from "@/Core/UseCases/Product/GetProductUseCase";
 import { GetProductsUseCase } from "@/Core/UseCases/Product/GetProductsUseCase";
 

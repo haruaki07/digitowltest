@@ -1,6 +1,6 @@
 import { TYPES } from "@/Infrastructure/DI/Types";
 import { inject, injectable } from "inversify";
-import { IAuthRepository } from "../Common/Interfaces/IAuthRepository";
+import { IAuthRepository } from "../../Common/Interfaces/IAuthRepository";
 
 @injectable()
 export class VerifyTokenUseCase {

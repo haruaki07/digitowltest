@@ -1,6 +1,6 @@
 import { TYPES } from "@/Infrastructure/DI";
 import { inject, injectable } from "inversify";
-import { VerifyTokenUseCase } from "./VerifyTokenUseCase";
+import { VerifyTokenUseCase } from "./Auth/VerifyTokenUseCase";
 import { GetProductsUseCase } from "./Product/GetProductsUseCase";
 import { GetProductUseCase } from "./Product/GetProductUseCase";
 
