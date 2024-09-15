@@ -38,12 +38,15 @@ async function main() {
     expressMiddleware(server, {
       context: async ({ req }) => {
         let userId: string | null = null;
-
-        const token = req.headers.token;
-        if (token) {
-          userId = await context.useCases.verifyTokenUseCase.execute(
-            token.toString()
-          );
+        try {
+          const token = req.headers["x-firebase-token"];
+          if (token) {
+            userId = await context.useCases.verifyTokenUseCase.execute(
+              token.toString()
+            );
+          }
+        } catch (e) {
+          console.error(e);
         }
 
         context.userId = userId;

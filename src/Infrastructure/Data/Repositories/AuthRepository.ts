@@ -1,7 +1,7 @@
 import { IAuthRepository } from "@/Core/Common/Interfaces/IAuthRepository";
 import { IFirebaseConnection } from "@/Core/Common/Interfaces/IFirebaseConnection";
 import { IMongoConnection } from "@/Core/Common/Interfaces/IMongoConnection";
-import { User } from "@/Domain/Entities/User";
+import { UserEntity } from "@/Domain/Entities/User";
 import { TYPES } from "@/Infrastructure/DI/Types";
 import { inject, injectable } from "inversify";
 
@@ -20,15 +20,21 @@ export class AuthRepository implements IAuthRepository {
     const firebaseId = payload.uid;
 
     const user = await this._dbConn
-      .collection<User>("users")
+      .collection<UserEntity>("users")
       .findOne({ firebaseId });
     if (user) {
       return user._id.toString();
     }
 
-    const newUser = await this._dbConn.collection<User>("users").insertOne({
-      firebaseId,
-    });
+    const newUser = await this._dbConn
+      .collection<UserEntity>("users")
+      .insertOne({
+        firebaseId,
+        cart: {
+          items: [],
+          amount: 0,
+        },
+      });
 
     return newUser.insertedId.toString();
   }

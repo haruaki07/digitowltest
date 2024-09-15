@@ -1,6 +1,6 @@
 import { IMongoConnection } from "@/Core/Common/Interfaces/IMongoConnection";
 import { IUserRepository } from "@/Core/Common/Interfaces/IUserRepository";
-import { User } from "@/Domain/Entities/User";
+import { UserEntity } from "@/Domain/Entities/User";
 import { TYPES } from "@/Infrastructure/DI/Types";
 import { inject, injectable } from "inversify";
 
@@ -12,10 +12,10 @@ export class UserRepository implements IUserRepository {
   ) {}
 
   private getCollection() {
-    return this._mongoConnection.collection<User>("users");
+    return this._mongoConnection.collection<UserEntity>("users");
   }
 
-  async findUserByFirebaseId(firebaseId: string): Promise<User> {
+  async findUserByFirebaseId(firebaseId: string): Promise<UserEntity> {
     const user = await this.getCollection().findOne({ firebaseId });
 
     if (!user) {
@@ -25,7 +25,7 @@ export class UserRepository implements IUserRepository {
     return user;
   }
 
-  async createUser(user: User): Promise<string> {
+  async createUser(user: UserEntity): Promise<string> {
     const { insertedId, acknowledged } = await this.getCollection().insertOne(
       user
     );

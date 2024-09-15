@@ -1,4 +1,4 @@
-import { Resolvers } from "@/generated/types";
+import { Resolvers } from "@/GraphQL/generated/types";
 
 export const HelloResolver: Resolvers = {
   Query: {

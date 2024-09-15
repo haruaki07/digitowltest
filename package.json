@@ -8,7 +8,8 @@
     "clean-build": "node -e \"require('fs').rmSync('dist', { force: true, recursive: true })\"",
     "build": "npm run clean-build && tsc -b && tsc-alias",
     "start": "node dist/server.js",
-    "gen": "gql-gen"
+    "gen": "gql-gen",
+    "seed": "ts-node scripts/seeder.ts"
   },
   "author": "",
   "license": "MIT",

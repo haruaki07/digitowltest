@@ -6,7 +6,12 @@ export const TYPES = {
 
   IAuthRepository: Symbol("IAuthRepository"),
   IUserRepository: Symbol("IUserRepository"),
+  IProductRepository: Symbol("IProductRepository"),
 
   UseCases: Symbol("UseCases"),
+
   VerifyTokenUseCase: Symbol("VerifyTokenUseCase"),
+
+  GetProductsUseCase: Symbol("GetProductsUseCase"),
+  GetProductUseCase: Symbol("GetProductUseCase"),
 };
