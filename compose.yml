@@ -1,0 +1,16 @@
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - digitowltest
+
+networks:
+  digitowltest:
+
+volumes:
+  mongodb-data:

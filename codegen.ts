@@ -4,18 +4,18 @@ const config: CodegenConfig = {
   overwrite: true,
   schema: [
     {
-      "./src/graphql/schema.ts": {
+      "./src/GraphQL/Schema.ts": {
         noPluck: true,
       },
     },
   ],
   require: "ts-node/register/transpile-only",
   generates: {
-    "./src/generated/types.ts": {
+    "./src/GraphQL/generated/types.ts": {
       plugins: ["typescript", "typescript-resolvers"],
       config: {
         useIndexSignature: true,
-        contextType: "../graphql/context#Context",
+        contextType: "@/GraphQL/Context#Context",
       },
     },
   },
