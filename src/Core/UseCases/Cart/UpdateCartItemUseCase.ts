@@ -13,16 +13,24 @@ export class UpdateCartItemUseCase {
   async execute(data: CartItemRequestModel): Promise<number> {
     const user = await this._userRepository.findUserById(data.userId);
 
-    const product = user.cart.items.find(
-      (item) => item.product._id.toString() === data.productId
-    );
+    if (user.cart.items.length === 0) {
+      throw new Error("Cart is empty");
+    }
 
-    if (!product) {
+    if (
+      !user.cart.items.find((item) => item.product._id.equals(data.productId))
+    ) {
       throw new Error("Product not in cart");
     }
 
-    product.quantity = data.quantity;
-    product.totalPrice = product.quantity * product.product.price;
+    user.cart.items = user.cart.items.map((item) => {
+      if (item.product._id.equals(data.productId)) {
+        item.quantity = data.quantity;
+        item.totalPrice = data.quantity * item.product.price;
+      }
+
+      return item;
+    });
 
     user.cart.totalPrice = user.cart.items.reduce(
       (total, item) => total + item.totalPrice,

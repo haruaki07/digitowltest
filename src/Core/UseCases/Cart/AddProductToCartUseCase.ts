@@ -20,10 +20,10 @@ export class AddProductToCartUseCase {
       data.productId
     );
 
-    if (user.cart.items.find((item) => item.product._id === product._id)) {
+    if (user.cart.items.find((item) => item.product._id.equals(product._id))) {
       // update existing product quantity if already in cart
       user.cart.items = user.cart.items.map((item) => {
-        if (item.product._id === product._id) {
+        if (item.product._id.equals(product._id)) {
           item.quantity += data.quantity;
           item.totalPrice = item.quantity * product.price;
         }
