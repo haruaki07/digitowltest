@@ -11,11 +11,6 @@ export class GetProductsUseCase {
   ) {}
 
   async execute(): Promise<Product[]> {
-    const products = await this._productRepository.getProducts();
-
-    return products.map((product) => ({
-      id: product._id.toString(),
-      ...product,
-    }));
+    return await this._productRepository.getProducts();
   }
 }

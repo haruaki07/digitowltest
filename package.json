@@ -26,7 +26,8 @@
     "graphql-tag": "^2.12.6",
     "inversify": "^6.0.2",
     "mongodb": "^6.8.1",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "undici": "^6.19.8"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.2",

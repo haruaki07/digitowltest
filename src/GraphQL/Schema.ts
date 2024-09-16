@@ -10,6 +10,8 @@ import { CartResolver } from "./Resolvers/CartResolver";
 import { OrderSchema } from "./Schemas/OrderSchema";
 import { Resolvers } from "./generated/types";
 import { OrderResolver } from "./Resolvers/OrderResolver";
+import { AuthSchema } from "./Schemas/AuthSchema";
+import { AuthResolver } from "./Resolvers/AuthResolver";
 
 const BaseSchema = gql`
   type Query
@@ -28,6 +30,7 @@ export const Schema = makeExecutableSchema({
     ProductSchema,
     CartSchema,
     OrderSchema,
+    AuthSchema,
   ],
   resolvers: [
     BaseResolver,
@@ -35,6 +38,7 @@ export const Schema = makeExecutableSchema({
     ProductResolver,
     CartResolver,
     OrderResolver,
+    AuthResolver,
   ],
 });
 

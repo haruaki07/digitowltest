@@ -1,4 +1,4 @@
-import { IUserRepository } from "@/Core/Common/Interfaces/IUserRepository";
+import { ICartRepository } from "@/Core/Common/Interfaces/ICartRepository";
 import { Cart } from "@/GraphQL/generated/types";
 import { TYPES } from "@/Infrastructure/DI";
 import { inject, injectable } from "inversify";
@@ -6,19 +6,11 @@ import { inject, injectable } from "inversify";
 @injectable()
 export class GetCartUseCase {
   constructor(
-    @inject(TYPES.IUserRepository)
-    private readonly _userRepository: IUserRepository
+    @inject(TYPES.ICartRepository)
+    private readonly _cartRepository: ICartRepository
   ) {}
 
   async execute(userId: string): Promise<Cart> {
-    const user = await this._userRepository.findUserById(userId);
-
-    return {
-      ...user.cart,
-      items: user.cart.items.map((item) => ({
-        ...item,
-        product: { ...item.product, id: item.product._id.toString() },
-      })),
-    };
+    return await this._cartRepository.getCart(userId);
   }
 }

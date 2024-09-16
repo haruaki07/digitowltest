@@ -1,6 +1,12 @@
+import { ObjectId } from "mongodb";
 import { CartEntity } from "./Cart";
 
 export class UserEntity {
-  public firebaseId!: string;
-  public cart!: CartEntity;
+  firebaseId!: string;
+  cart!: CartEntity;
+}
+
+export class IdUserEntity extends UserEntity {
+  id!: string;
+  _id!: ObjectId;
 }

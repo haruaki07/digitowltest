@@ -10,6 +10,7 @@ import { GetCartUseCase } from "./Cart/GetCartUseCase";
 import { GetOrderUseCase } from "./Order/GetOrderUseCase";
 import { GetOrdersUseCase } from "./Order/GetOrdersUseCase";
 import { CreateOrderUseCase } from "./Order/CreateOrderUseCase";
+import { SignInUseCase } from "./Auth/SignInUseCase";
 
 @injectable()
 export class UseCases {
@@ -42,4 +43,7 @@ export class UseCases {
 
   @inject(TYPES.GetOrderUseCase)
   getOrderUseCase!: GetOrderUseCase;
+
+  @inject(TYPES.SignInUseCase)
+  signInUseCase!: SignInUseCase;
 }

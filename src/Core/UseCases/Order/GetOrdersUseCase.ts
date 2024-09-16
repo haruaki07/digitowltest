@@ -11,17 +11,6 @@ export class GetOrdersUseCase {
   ) {}
 
   async execute(userId: string): Promise<Order[]> {
-    const orders = await this._orderRepository.findUserOrders(userId);
-
-    return orders.map((order) => ({
-      ...order,
-      id: order._id.toString(),
-      products: order.products.map((product) => ({
-        ...product,
-        id: product._id.toString(),
-        name: product.name,
-        price: product.price,
-      })),
-    }));
+    return await this._orderRepository.findUserOrders(userId);
   }
 }

@@ -37,6 +37,7 @@ export type Mutation = {
   addProductToCart: Scalars['Int']['output'];
   createOrder: Order;
   removeProductFromCart: Scalars['Int']['output'];
+  signIn: Scalars['String']['output'];
   updateCartItem: Scalars['Int']['output'];
 };
 
@@ -49,6 +50,12 @@ export type MutationAddProductToCartArgs = {
 
 export type MutationRemoveProductFromCartArgs = {
   productId: Scalars['ID']['input'];
+};
+
+
+export type MutationSignInArgs = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 
@@ -214,6 +221,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   addProductToCart?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationAddProductToCartArgs, 'productId' | 'quantity'>>;
   createOrder?: Resolver<ResolversTypes['Order'], ParentType, ContextType>;
   removeProductFromCart?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationRemoveProductFromCartArgs, 'productId'>>;
+  signIn?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationSignInArgs, 'email' | 'password'>>;
   updateCartItem?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationUpdateCartItemArgs, 'productId' | 'quantity'>>;
 }>;
 

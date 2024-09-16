@@ -4,14 +4,21 @@ export const TYPES = {
   IFirebaseConnection: Symbol("IFirebaseConnection"),
   IMongoConnection: Symbol("IMongoConnection"),
 
+  IUserDataSource: Symbol("IUserDataSource"),
+  IAuthDataSource: Symbol("IAuthDataSource"),
+  IProductDataSource: Symbol("IProductDataSource"),
+  IOrderDataSource: Symbol("IOrderDataSource"),
+
   IAuthRepository: Symbol("IAuthRepository"),
   IUserRepository: Symbol("IUserRepository"),
   IProductRepository: Symbol("IProductRepository"),
   IOrderRepository: Symbol("IOrderRepository"),
+  ICartRepository: Symbol("ICartRepository"),
 
   UseCases: Symbol("UseCases"),
 
   VerifyTokenUseCase: Symbol("VerifyTokenUseCase"),
+  SignInUseCase: Symbol("SignInUseCase"),
 
   GetProductsUseCase: Symbol("GetProductsUseCase"),
   GetProductUseCase: Symbol("GetProductUseCase"),
