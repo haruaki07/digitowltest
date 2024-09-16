@@ -17,6 +17,43 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Cart = {
+  __typename?: 'Cart';
+  items: Array<CartItem>;
+  totalPrice: Scalars['Int']['output'];
+};
+
+export type CartItem = {
+  __typename?: 'CartItem';
+  product: Product;
+  quantity: Scalars['Int']['output'];
+  totalPrice: Scalars['Int']['output'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  addProductToCart: Scalars['Int']['output'];
+  removeProductFromCart: Scalars['Int']['output'];
+  updateCartItem: Scalars['Int']['output'];
+};
+
+
+export type MutationAddProductToCartArgs = {
+  productId: Scalars['ID']['input'];
+  quantity: Scalars['Int']['input'];
+};
+
+
+export type MutationRemoveProductFromCartArgs = {
+  productId: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdateCartItemArgs = {
+  productId: Scalars['ID']['input'];
+  quantity: Scalars['Int']['input'];
+};
+
 export type Product = {
   __typename?: 'Product';
   id: Scalars['ID']['output'];
@@ -26,6 +63,7 @@ export type Product = {
 
 export type Query = {
   __typename?: 'Query';
+  cart: Cart;
   hello: Scalars['String']['output'];
   product?: Maybe<Product>;
   products: Array<Product>;
@@ -109,8 +147,11 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Cart: ResolverTypeWrapper<Cart>;
+  CartItem: ResolverTypeWrapper<CartItem>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Product: ResolverTypeWrapper<Product>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -119,11 +160,33 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output'];
+  Cart: Cart;
+  CartItem: CartItem;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  Mutation: {};
   Product: Product;
   Query: {};
   String: Scalars['String']['output'];
+}>;
+
+export type CartResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Cart'] = ResolversParentTypes['Cart']> = ResolversObject<{
+  items?: Resolver<Array<ResolversTypes['CartItem']>, ParentType, ContextType>;
+  totalPrice?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type CartItemResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CartItem'] = ResolversParentTypes['CartItem']> = ResolversObject<{
+  product?: Resolver<ResolversTypes['Product'], ParentType, ContextType>;
+  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalPrice?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  addProductToCart?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationAddProductToCartArgs, 'productId' | 'quantity'>>;
+  removeProductFromCart?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationRemoveProductFromCartArgs, 'productId'>>;
+  updateCartItem?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationUpdateCartItemArgs, 'productId' | 'quantity'>>;
 }>;
 
 export type ProductResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
@@ -134,12 +197,16 @@ export type ProductResolvers<ContextType = Context, ParentType extends Resolvers
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  cart?: Resolver<ResolversTypes['Cart'], ParentType, ContextType>;
   hello?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   product?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType, RequireFields<QueryProductArgs, 'id'>>;
   products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
+  Cart?: CartResolvers<ContextType>;
+  CartItem?: CartItemResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 }>;

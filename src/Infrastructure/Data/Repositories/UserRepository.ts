@@ -3,6 +3,7 @@ import { IUserRepository } from "@/Core/Common/Interfaces/IUserRepository";
 import { UserEntity } from "@/Domain/Entities/User";
 import { TYPES } from "@/Infrastructure/DI/Types";
 import { inject, injectable } from "inversify";
+import { ObjectId } from "mongodb";
 
 @injectable()
 export class UserRepository implements IUserRepository {
@@ -13,6 +14,16 @@ export class UserRepository implements IUserRepository {
 
   private getCollection() {
     return this._mongoConnection.collection<UserEntity>("users");
+  }
+
+  async findUserById(id: string): Promise<UserEntity> {
+    const user = await this.getCollection().findOne({ _id: new ObjectId(id) });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
   }
 
   async findUserByFirebaseId(firebaseId: string): Promise<UserEntity> {
@@ -35,5 +46,19 @@ export class UserRepository implements IUserRepository {
     }
 
     return insertedId.toString();
+  }
+
+  async updateUser(id: string, user: Partial<UserEntity>): Promise<UserEntity> {
+    const res = await this.getCollection().findOneAndUpdate(
+      { _id: new ObjectId(id) },
+      { $set: user },
+      { returnDocument: "after" }
+    );
+
+    if (!res) {
+      throw new Error("Failed to update user");
+    }
+
+    return res;
   }
 }

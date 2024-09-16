@@ -32,7 +32,7 @@ export class AuthRepository implements IAuthRepository {
         firebaseId,
         cart: {
           items: [],
-          amount: 0,
+          totalPrice: 0,
         },
       });
 

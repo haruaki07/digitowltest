@@ -14,4 +14,9 @@ export const TYPES = {
 
   GetProductsUseCase: Symbol("GetProductsUseCase"),
   GetProductUseCase: Symbol("GetProductUseCase"),
+
+  GetCartUseCase: Symbol("GetCartUseCase"),
+  AddProductToCartUseCase: Symbol("AddProductToCartUseCase"),
+  RemoveProductFromCartUseCase: Symbol("RemoveProductFromCartUseCase"),
+  UpdateCartItemUseCase: Symbol("UpdateCartItemUseCase"),
 };

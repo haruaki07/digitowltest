@@ -12,10 +12,13 @@ import { Context } from "@/GraphQL/Context";
 import { UseCases } from "@/Core/UseCases";
 import { ProductRepository } from "../Data/Repositories/ProductRepository";
 import { IProductRepository } from "@/Core/Common/Interfaces/IProductRepository";
-import { Verify } from "crypto";
 import { VerifyTokenUseCase } from "@/Core/UseCases/Auth/VerifyTokenUseCase";
 import { GetProductUseCase } from "@/Core/UseCases/Product/GetProductUseCase";
 import { GetProductsUseCase } from "@/Core/UseCases/Product/GetProductsUseCase";
+import { UpdateCartItemUseCase } from "@/Core/UseCases/Cart/UpdateCartItemUseCase";
+import { RemoveProductFromCartUseCase } from "@/Core/UseCases/Cart/RemoveProductFromCartUseCase";
+import { AddProductToCartUseCase } from "@/Core/UseCases/Cart/AddProductToCartUseCase";
+import { GetCartUseCase } from "@/Core/UseCases/Cart/GetCartUseCase";
 
 const container = new Container();
 
@@ -45,5 +48,15 @@ container
 container
   .bind<GetProductUseCase>(TYPES.GetProductUseCase)
   .to(GetProductUseCase);
+container.bind<GetCartUseCase>(TYPES.GetCartUseCase).to(GetCartUseCase);
+container
+  .bind<AddProductToCartUseCase>(TYPES.AddProductToCartUseCase)
+  .to(AddProductToCartUseCase);
+container
+  .bind<RemoveProductFromCartUseCase>(TYPES.RemoveProductFromCartUseCase)
+  .to(RemoveProductFromCartUseCase);
+container
+  .bind<UpdateCartItemUseCase>(TYPES.UpdateCartItemUseCase)
+  .to(UpdateCartItemUseCase);
 
 export { container };

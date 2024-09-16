@@ -1,7 +1,7 @@
-import { ProductEntity } from "./Product";
+import { IdProductEntity } from "./Product";
 
 export class CartItemEntity {
-  product!: ProductEntity;
+  product!: IdProductEntity;
   quantity!: number;
   totalPrice!: number;
 }

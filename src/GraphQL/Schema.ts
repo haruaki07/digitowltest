@@ -4,14 +4,17 @@ import { HelloResolver } from "./Resolvers/HelloResolver";
 import { HelloSchema } from "./Schemas/HelloSchema";
 import { ProductSchema } from "./Schemas/ProductSchema";
 import { ProductResolver } from "./Resolvers/ProductResolver";
+import { CartSchema } from "./Schemas/CartSchema";
+import { CartResolver } from "./Resolvers/CartResolver";
 
 const BaseSchema = gql`
   type Query
+  type Mutation
 `;
 
 export const Schema = makeExecutableSchema({
-  typeDefs: [BaseSchema, HelloSchema, ProductSchema],
-  resolvers: [HelloResolver, ProductResolver],
+  typeDefs: [BaseSchema, HelloSchema, ProductSchema, CartSchema],
+  resolvers: [HelloResolver, ProductResolver, CartResolver],
 });
 
 export default Schema;
