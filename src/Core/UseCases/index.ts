@@ -7,6 +7,9 @@ import { AddProductToCartUseCase } from "./Cart/AddProductToCartUseCase";
 import { RemoveProductFromCartUseCase } from "./Cart/RemoveProductFromCartUseCase";
 import { UpdateCartItemUseCase } from "./Cart/UpdateCartItemUseCase";
 import { GetCartUseCase } from "./Cart/GetCartUseCase";
+import { GetOrderUseCase } from "./Order/GetOrderUseCase";
+import { GetOrdersUseCase } from "./Order/GetOrdersUseCase";
+import { CreateOrderUseCase } from "./Order/CreateOrderUseCase";
 
 @injectable()
 export class UseCases {
@@ -30,4 +33,13 @@ export class UseCases {
 
   @inject(TYPES.UpdateCartItemUseCase)
   updateCartItemUseCase!: UpdateCartItemUseCase;
+
+  @inject(TYPES.CreateOrderUseCase)
+  createOrderUseCase!: CreateOrderUseCase;
+
+  @inject(TYPES.GetOrdersUseCase)
+  getOrdersUseCase!: GetOrdersUseCase;
+
+  @inject(TYPES.GetOrderUseCase)
+  getOrderUseCase!: GetOrderUseCase;
 }

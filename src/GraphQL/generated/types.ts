@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { Context } from '@/GraphQL/Context';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -15,6 +15,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
+  DateTime: { input: Date | string; output: Date | string; }
 };
 
 export type Cart = {
@@ -33,6 +35,7 @@ export type CartItem = {
 export type Mutation = {
   __typename?: 'Mutation';
   addProductToCart: Scalars['Int']['output'];
+  createOrder: Order;
   removeProductFromCart: Scalars['Int']['output'];
   updateCartItem: Scalars['Int']['output'];
 };
@@ -54,6 +57,15 @@ export type MutationUpdateCartItemArgs = {
   quantity: Scalars['Int']['input'];
 };
 
+export type Order = {
+  __typename?: 'Order';
+  id: Scalars['ID']['output'];
+  placedAt: Scalars['DateTime']['output'];
+  products: Array<Product>;
+  totalPrice: Scalars['Int']['output'];
+  userId: Scalars['ID']['output'];
+};
+
 export type Product = {
   __typename?: 'Product';
   id: Scalars['ID']['output'];
@@ -65,8 +77,15 @@ export type Query = {
   __typename?: 'Query';
   cart: Cart;
   hello: Scalars['String']['output'];
+  order?: Maybe<Order>;
+  orders: Array<Order>;
   product?: Maybe<Product>;
   products: Array<Product>;
+};
+
+
+export type QueryOrderArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -149,9 +168,11 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Cart: ResolverTypeWrapper<Cart>;
   CartItem: ResolverTypeWrapper<CartItem>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
+  Order: ResolverTypeWrapper<Order>;
   Product: ResolverTypeWrapper<Product>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -162,9 +183,11 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output'];
   Cart: Cart;
   CartItem: CartItem;
+  DateTime: Scalars['DateTime']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   Mutation: {};
+  Order: Order;
   Product: Product;
   Query: {};
   String: Scalars['String']['output'];
@@ -183,10 +206,24 @@ export type CartItemResolvers<ContextType = Context, ParentType extends Resolver
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
+
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   addProductToCart?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationAddProductToCartArgs, 'productId' | 'quantity'>>;
+  createOrder?: Resolver<ResolversTypes['Order'], ParentType, ContextType>;
   removeProductFromCart?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationRemoveProductFromCartArgs, 'productId'>>;
   updateCartItem?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationUpdateCartItemArgs, 'productId' | 'quantity'>>;
+}>;
+
+export type OrderResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  placedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
+  totalPrice?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ProductResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
@@ -199,6 +236,8 @@ export type ProductResolvers<ContextType = Context, ParentType extends Resolvers
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   cart?: Resolver<ResolversTypes['Cart'], ParentType, ContextType>;
   hello?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  order?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<QueryOrderArgs, 'id'>>;
+  orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>;
   product?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType, RequireFields<QueryProductArgs, 'id'>>;
   products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
 }>;
@@ -206,7 +245,9 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
 export type Resolvers<ContextType = Context> = ResolversObject<{
   Cart?: CartResolvers<ContextType>;
   CartItem?: CartItemResolvers<ContextType>;
+  DateTime?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
+  Order?: OrderResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 }>;

@@ -19,6 +19,11 @@ import { UpdateCartItemUseCase } from "@/Core/UseCases/Cart/UpdateCartItemUseCas
 import { RemoveProductFromCartUseCase } from "@/Core/UseCases/Cart/RemoveProductFromCartUseCase";
 import { AddProductToCartUseCase } from "@/Core/UseCases/Cart/AddProductToCartUseCase";
 import { GetCartUseCase } from "@/Core/UseCases/Cart/GetCartUseCase";
+import { GetOrderUseCase } from "@/Core/UseCases/Order/GetOrderUseCase";
+import { GetOrdersUseCase } from "@/Core/UseCases/Order/GetOrdersUseCase";
+import { CreateOrderUseCase } from "@/Core/UseCases/Order/CreateOrderUseCase";
+import { OrderRepository } from "../Data/Repositories/OrderRepository";
+import { IOrderRepository } from "@/Core/Common/Interfaces/IOrderRepository";
 
 const container = new Container();
 
@@ -36,6 +41,7 @@ container.bind<IUserRepository>(TYPES.IUserRepository).to(UserRepository);
 container
   .bind<IProductRepository>(TYPES.IProductRepository)
   .to(ProductRepository);
+container.bind<IOrderRepository>(TYPES.IOrderRepository).to(OrderRepository);
 
 // use cases
 container.bind<UseCases>(TYPES.UseCases).to(UseCases);
@@ -58,5 +64,10 @@ container
 container
   .bind<UpdateCartItemUseCase>(TYPES.UpdateCartItemUseCase)
   .to(UpdateCartItemUseCase);
+container
+  .bind<CreateOrderUseCase>(TYPES.CreateOrderUseCase)
+  .to(CreateOrderUseCase);
+container.bind<GetOrdersUseCase>(TYPES.GetOrdersUseCase).to(GetOrdersUseCase);
+container.bind<GetOrderUseCase>(TYPES.GetOrderUseCase).to(GetOrderUseCase);
 
 export { container };

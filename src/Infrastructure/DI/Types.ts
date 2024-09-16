@@ -7,6 +7,7 @@ export const TYPES = {
   IAuthRepository: Symbol("IAuthRepository"),
   IUserRepository: Symbol("IUserRepository"),
   IProductRepository: Symbol("IProductRepository"),
+  IOrderRepository: Symbol("IOrderRepository"),
 
   UseCases: Symbol("UseCases"),
 
@@ -19,4 +20,8 @@ export const TYPES = {
   AddProductToCartUseCase: Symbol("AddProductToCartUseCase"),
   RemoveProductFromCartUseCase: Symbol("RemoveProductFromCartUseCase"),
   UpdateCartItemUseCase: Symbol("UpdateCartItemUseCase"),
+
+  CreateOrderUseCase: Symbol("CreateOrderUseCase"),
+  GetOrdersUseCase: Symbol("GetOrdersUseCase"),
+  GetOrderUseCase: Symbol("GetOrderUseCase"),
 };
