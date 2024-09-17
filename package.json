@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/server.js",
   "scripts": {
-    "test": "jest --watch --coverage",
+    "test": "jest --watchAll --coverage",
     "dev": "nodemon -e ts -w src --exec \"ts-node src/server.ts -p tsconfig.build.json\"",
     "clean-build": "node -e \"require('fs').rmSync('dist', { force: true, recursive: true })\"",
     "build": "npm run clean-build && tsc -p tsconfig.build.json && tsc-alias",
