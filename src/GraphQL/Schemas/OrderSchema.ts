@@ -4,9 +4,15 @@ export const OrderSchema = gql`
   type Order {
     id: ID!
     userId: ID!
-    products: [Product!]!
+    items: [OrderItem!]!
     totalPrice: Int!
     placedAt: DateTime!
+  }
+
+  type OrderItem {
+    name: String!
+    price: Int!
+    quantity: Int!
   }
 
   extend type Query {

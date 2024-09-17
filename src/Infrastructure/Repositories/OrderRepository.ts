@@ -2,10 +2,10 @@ import { IMongoConnection } from "@/Core/Common/Interfaces/IMongoConnection";
 import { IOrderDataSource } from "@/Core/Common/Interfaces/IOrderDataSource";
 import { IOrderRepository } from "@/Core/Common/Interfaces/IOrderRepository";
 import { IUserDataSource } from "@/Core/Common/Interfaces/IUserDataSource";
-import { IdOrderEntity, OrderEntity } from "@/Domain/Entities/Order";
+import { IdOrderEntity } from "@/Domain/Entities/Order";
+import { OrderItemEntity } from "@/Domain/Entities/OrderItem";
 import { TYPES } from "@/Infrastructure/DI";
-import { injectable, inject } from "inversify";
-import { ObjectId } from "mongodb";
+import { inject, injectable } from "inversify";
 
 @injectable()
 export class OrderRepository implements IOrderRepository {
@@ -28,10 +28,7 @@ export class OrderRepository implements IOrderRepository {
     userId: string,
     orderId: string
   ): Promise<IdOrderEntity> {
-    const order = await this._orderDataSource.findBy({
-      userId,
-      _id: new ObjectId(orderId),
-    });
+    const order = await this._orderDataSource.findById(userId, orderId);
 
     return order;
   }
@@ -47,8 +44,10 @@ export class OrderRepository implements IOrderRepository {
       const orderId = await this._orderDataSource.create(
         {
           userId,
-          products: user.cart.items.map((item) => ({
-            ...item.product,
+          items: user.cart.items.map<OrderItemEntity>((item) => ({
+            name: item.product.name,
+            price: item.product.price,
+            quantity: item.quantity,
           })),
           totalPrice: user.cart.totalPrice,
           placedAt: new Date(),
@@ -64,13 +63,9 @@ export class OrderRepository implements IOrderRepository {
         }
       );
 
-      return await this._orderDataSource.findBy(
-        {
-          userId,
-          _id: new ObjectId(orderId),
-        },
-        { session }
-      );
+      return await this._orderDataSource.findById(userId, orderId, {
+        session,
+      });
     });
 
     return order;

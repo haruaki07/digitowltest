@@ -1,14 +1,21 @@
-import { DataSourceOptions } from "@/Domain/Common/DataSourceOptions";
-import { IdOrderEntity, OrderEntity } from "@/Domain/Entities/Order";
+import { DataSourceOptions } from "@/Core/Common/Interfaces/DataSourceOptions";
+import {
+  OrderRequestModel,
+  OrderResponseModel,
+} from "@/Domain/Models/OrderModel";
 
 export interface IOrderDataSource {
-  findBy(
-    filter: Partial<IdOrderEntity>,
+  findById(
+    userId: string,
+    id: string,
     options?: DataSourceOptions
-  ): Promise<IdOrderEntity>;
+  ): Promise<OrderResponseModel>;
   findAll(
-    filter: Partial<IdOrderEntity>,
+    query: Partial<OrderRequestModel>,
     options?: DataSourceOptions
-  ): Promise<IdOrderEntity[]>;
-  create(order: OrderEntity, options?: DataSourceOptions): Promise<string>;
+  ): Promise<OrderResponseModel[]>;
+  create(
+    order: OrderRequestModel,
+    options?: DataSourceOptions
+  ): Promise<string>;
 }

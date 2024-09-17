@@ -1,7 +1,8 @@
 import { IMongoConnection } from "@/Core/Common/Interfaces/IMongoConnection";
 import { IProductDataSource } from "@/Core/Common/Interfaces/IProductDataSource";
-import { DataSourceOptions } from "@/Domain/Common/DataSourceOptions";
-import { IdProductEntity } from "@/Domain/Entities/Product";
+import { DataSourceOptions } from "@/Core/Common/Interfaces/DataSourceOptions";
+import { IdProductEntity, ProductEntity } from "@/Domain/Entities/Product";
+import { ProductResponseModel } from "@/Domain/Models/ProductModel";
 import { TYPES } from "@/Infrastructure/DI";
 import { inject, injectable } from "inversify";
 import { ObjectId } from "mongodb";
@@ -13,36 +14,30 @@ export class ProductDataSource implements IProductDataSource {
     private readonly _mongoConn: IMongoConnection
   ) {}
 
-  private getCollection() {
-    return this._mongoConn.collection<IdProductEntity>("products");
-  }
-
   async findById(
     id: string,
     options?: DataSourceOptions
-  ): Promise<IdProductEntity> {
-    const product = await this.getCollection().findOne(
-      { _id: new ObjectId(id) },
-      { session: options?.session }
+  ): Promise<ProductResponseModel> {
+    const product = await this._mongoConn.findOne<ProductEntity>(
+      "products",
+      {
+        _id: new ObjectId(id),
+      },
+      { ...options }
     );
 
     if (!product) {
       throw new Error("Product not found");
     }
 
-    return {
-      ...product,
-      id: product._id.toString(),
-    };
+    return product;
   }
 
-  async findAll(options?: DataSourceOptions): Promise<IdProductEntity[]> {
-    return await this.getCollection()
-      .find({}, { session: options?.session })
-      .map((product) => ({
-        ...product,
-        id: product._id.toString(),
-      }))
-      .toArray();
+  async findAll(options?: DataSourceOptions): Promise<ProductResponseModel[]> {
+    return await this._mongoConn.find<ProductEntity>(
+      "products",
+      {},
+      { ...options }
+    );
   }
 }

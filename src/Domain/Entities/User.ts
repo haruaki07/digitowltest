@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { CartEntity } from "./Cart";
 
 export class UserEntity {
@@ -8,5 +7,4 @@ export class UserEntity {
 
 export class IdUserEntity extends UserEntity {
   id!: string;
-  _id!: ObjectId;
 }

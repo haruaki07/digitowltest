@@ -19,7 +19,7 @@ export class AuthRepository implements IAuthRepository {
     let userId: string;
     try {
       const user = await this._userDataSource.findByFirebaseId(firebaseId);
-      userId = user._id.toString();
+      userId = user.id;
     } catch {
       // create if user is not exists in collection
       userId = await this._userDataSource.create({

@@ -1,7 +1,10 @@
-import { DataSourceOptions } from "@/Domain/Common/DataSourceOptions";
-import { IdProductEntity } from "@/Domain/Entities/Product";
+import { DataSourceOptions } from "@/Core/Common/Interfaces/DataSourceOptions";
+import { ProductResponseModel } from "@/Domain/Models/ProductModel";
 
 export interface IProductDataSource {
-  findById(id: string, options?: DataSourceOptions): Promise<IdProductEntity>;
-  findAll(options?: DataSourceOptions): Promise<IdProductEntity[]>;
+  findById(
+    id: string,
+    options?: DataSourceOptions
+  ): Promise<ProductResponseModel>;
+  findAll(options?: DataSourceOptions): Promise<ProductResponseModel[]>;
 }

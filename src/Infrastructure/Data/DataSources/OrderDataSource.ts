@@ -1,7 +1,11 @@
 import { IMongoConnection } from "@/Core/Common/Interfaces/IMongoConnection";
 import { IOrderDataSource } from "@/Core/Common/Interfaces/IOrderDataSource";
-import { DataSourceOptions } from "@/Domain/Common/DataSourceOptions";
+import { DataSourceOptions } from "@/Core/Common/Interfaces/DataSourceOptions";
 import { IdOrderEntity, OrderEntity } from "@/Domain/Entities/Order";
+import {
+  OrderRequestModel,
+  OrderResponseModel,
+} from "@/Domain/Models/OrderModel";
 import { TYPES } from "@/Infrastructure/DI";
 import { inject, injectable } from "inversify";
 import { ObjectId } from "mongodb";
@@ -13,63 +17,49 @@ export class OrderDataSource implements IOrderDataSource {
     private readonly _mongoConn: IMongoConnection
   ) {}
 
-  private getCollection() {
-    return this._mongoConn.collection<OrderEntity>("orders");
-  }
-
-  async findBy(
-    filter: Partial<OrderEntity>,
+  async findById(
+    userId: string,
+    id: string,
     options?: DataSourceOptions
-  ): Promise<IdOrderEntity> {
-    const order = await this.getCollection().findOne(filter, {
-      session: options?.session,
-    });
+  ): Promise<OrderResponseModel> {
+    const order = await this._mongoConn.findOne<OrderEntity>(
+      "orders",
+      { _id: new ObjectId(id), userId },
+      {
+        session: options?.session,
+      }
+    );
 
     if (!order) {
       throw new Error("Order not found");
     }
 
-    return {
-      ...order,
-      id: order._id.toString(),
-      products: order.products.map((product) => ({
-        ...product,
-        id: product._id.toString(),
-      })),
-    };
+    return order;
   }
 
   async findAll(
-    filter: Partial<OrderEntity> = {},
+    query: Partial<OrderRequestModel>,
     options?: DataSourceOptions
   ) {
-    const orders = await this.getCollection()
-      .find(filter, { session: options?.session })
-      .toArray();
+    const orders = await this._mongoConn.find<OrderEntity>("orders", query, {
+      session: options?.session,
+    });
 
-    return orders.map((order) => ({
-      ...order,
-      id: order._id.toString(),
-      products: order.products.map((product) => ({
-        ...product,
-        id: product._id.toString(),
-      })),
-    }));
+    return orders;
   }
 
   async create(
-    order: OrderEntity,
+    order: OrderRequestModel,
     options?: DataSourceOptions
   ): Promise<string> {
-    const { insertedId, acknowledged } = await this.getCollection().insertOne(
-      order,
-      { session: options?.session }
-    );
+    const id = await this._mongoConn.insertOne<OrderEntity>("orders", order, {
+      session: options?.session,
+    });
 
-    if (!acknowledged) {
+    if (!id) {
       throw new Error("Failed to create order");
     }
 
-    return insertedId.toString();
+    return id.toString();
   }
 }

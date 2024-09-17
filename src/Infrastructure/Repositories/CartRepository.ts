@@ -35,12 +35,10 @@ export class CartRepository implements ICartRepository {
           session,
         });
 
-        if (
-          user.cart.items.find((item) => item.product._id.equals(product._id))
-        ) {
+        if (user.cart.items.find((item) => item.product.id === product.id)) {
           // update existing product quantity if already in cart
           user.cart.items = user.cart.items.map((item) => {
-            if (item.product._id.equals(product._id)) {
+            if (item.product.id === product.id) {
               item.quantity += qty;
               item.totalPrice = item.quantity * product.price;
             }
@@ -88,14 +86,12 @@ export class CartRepository implements ICartRepository {
         });
 
         // check if product not in cart
-        if (
-          !user.cart.items.find((item) => item.product._id.equals(product._id))
-        ) {
+        if (!user.cart.items.find((item) => item.product.id === product.id)) {
           throw new Error("Product not in cart");
         }
 
         user.cart.items = user.cart.items.filter(
-          (item) => !item.product._id.equals(product._id)
+          (item) => item.product.id !== product.id
         );
 
         // recalculate cart total price
@@ -130,14 +126,12 @@ export class CartRepository implements ICartRepository {
           session,
         });
 
-        if (
-          !user.cart.items.find((item) => item.product._id.equals(product._id))
-        ) {
+        if (!user.cart.items.find((item) => item.product.id === product.id)) {
           throw new Error("Product not in cart");
         }
 
         user.cart.items = user.cart.items.map((item) => {
-          if (item.product._id.equals(product._id)) {
+          if (item.product.id === product.id) {
             item.quantity = qty;
             item.totalPrice = item.quantity * product.price;
           }

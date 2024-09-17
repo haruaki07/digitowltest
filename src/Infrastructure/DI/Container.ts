@@ -35,9 +35,11 @@ import { ICartRepository } from "@/Core/Common/Interfaces/ICartRepository";
 import { CartRepository } from "../Repositories/CartRepository";
 import { IOrderDataSource } from "@/Core/Common/Interfaces/IOrderDataSource";
 import { OrderDataSource } from "../Data/DataSources/OrderDataSource";
+import { config, Config } from "@/config";
 
 const container = new Container();
 
+container.bind<Config>(TYPES.Config).toConstantValue(config);
 container.bind<Context>(TYPES.Context).to(Context);
 
 // data connections

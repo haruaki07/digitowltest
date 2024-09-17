@@ -7,5 +7,4 @@ export class ProductEntity {
 
 export class IdProductEntity extends ProductEntity {
   id!: string;
-  _id!: ObjectId;
 }

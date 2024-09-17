@@ -1,14 +1,12 @@
-import { ObjectId } from "mongodb";
-import { IdProductEntity } from "./Product";
+import { OrderItemEntity } from "./OrderItem";
 
 export class OrderEntity {
   userId!: string;
-  products!: IdProductEntity[];
+  items!: OrderItemEntity[];
   totalPrice!: number;
   placedAt!: Date;
 }
 
 export class IdOrderEntity extends OrderEntity {
   id!: string;
-  _id!: ObjectId;
 }

@@ -1,7 +1,8 @@
 import { IMongoConnection } from "@/Core/Common/Interfaces/IMongoConnection";
 import { IUserDataSource } from "@/Core/Common/Interfaces/IUserDataSource";
-import { DataSourceOptions } from "@/Domain/Common/DataSourceOptions";
+import { DataSourceOptions } from "@/Core/Common/Interfaces/DataSourceOptions";
 import { IdUserEntity, UserEntity } from "@/Domain/Entities/User";
+import { UserResponseModel, UserRequestModel } from "@/Domain/Models/UserModel";
 import { TYPES } from "@/Infrastructure/DI";
 import { inject, injectable } from "inversify";
 import { ObjectId } from "mongodb";
@@ -13,128 +14,79 @@ export class UserDataSource implements IUserDataSource {
     private readonly _mongoConn: IMongoConnection
   ) {}
 
-  private getCollection() {
-    return this._mongoConn.collection<UserEntity>("users");
-  }
-
-  async findAll(options?: DataSourceOptions): Promise<IdUserEntity[]> {
-    return await this.getCollection()
-      .find({}, { session: options?.session })
-      .map((user) => ({
-        ...user,
-        id: user._id.toString(),
-        cart: {
-          ...user.cart,
-          items: user.cart.items.map((item) => ({
-            ...item,
-            product: { ...item.product, id: item.product._id.toString() },
-          })),
-        },
-      }))
-      .toArray();
+  async findAll(options?: DataSourceOptions): Promise<UserResponseModel[]> {
+    return await this._mongoConn.find<UserEntity>(
+      "users",
+      {},
+      { session: options?.session }
+    );
   }
 
   async findById(
     id: string,
     options?: DataSourceOptions
-  ): Promise<IdUserEntity> {
-    const user = await this.getCollection().findOne(
+  ): Promise<UserResponseModel> {
+    const user = await this._mongoConn.findOne<UserEntity>(
+      "users",
       { _id: new ObjectId(id) },
       { session: options?.session }
     );
 
-    if (!user) {
-      throw new Error("User not found");
-    }
+    if (!user) throw new Error("User not found");
 
-    return {
-      ...user,
-      id: user._id.toString(),
-      cart: {
-        ...user.cart,
-        items: user.cart.items.map((item) => ({
-          ...item,
-          product: { ...item.product, id: item.product._id.toString() },
-        })),
-      },
-    };
+    return user;
   }
 
   async findByFirebaseId(
     firebaseId: string,
     options?: DataSourceOptions
-  ): Promise<IdUserEntity> {
-    const user = await this.getCollection().findOne(
+  ): Promise<UserResponseModel> {
+    const user = await this._mongoConn.findOne<UserEntity>(
+      "users",
       { firebaseId },
       { session: options?.session }
     );
 
-    if (!user) {
-      throw new Error("User not found");
-    }
+    if (!user) throw new Error("User not found");
 
-    return {
-      ...user,
-      id: user._id.toString(),
-      cart: {
-        ...user.cart,
-        items: user.cart.items.map((item) => ({
-          ...item,
-          product: { ...item.product, id: item.product._id.toString() },
-        })),
-      },
-    };
+    return user;
   }
 
-  async create(user: UserEntity, options?: DataSourceOptions): Promise<string> {
-    const { insertedId, acknowledged } = await this.getCollection().insertOne(
-      user,
-      { session: options?.session }
-    );
+  async create(
+    user: UserRequestModel,
+    options?: DataSourceOptions
+  ): Promise<string> {
+    const id = await this._mongoConn.insertOne<UserEntity>("users", user, {
+      session: options?.session,
+    });
+    if (!id) throw new Error("Failed to create user");
 
-    if (!acknowledged) {
-      throw new Error("Failed to create user");
-    }
-
-    return insertedId.toString();
+    return id.toString();
   }
 
   async update(
     id: string,
-    user: Partial<UserEntity>,
+    user: Partial<UserRequestModel>,
     options?: DataSourceOptions
-  ): Promise<IdUserEntity> {
-    const res = await this.getCollection().findOneAndUpdate(
+  ): Promise<UserResponseModel> {
+    const res = await this._mongoConn.findAndUpdate<UserEntity>(
+      "users",
       { _id: new ObjectId(id) },
-      { $set: user },
-      { returnDocument: "after", session: options?.session }
+      user,
+      { session: options?.session }
     );
+    if (!res) throw new Error("Failed to update user");
 
-    if (!res) {
-      throw new Error("Failed to update user");
-    }
-
-    return {
-      ...res,
-      id: res._id.toString(),
-      cart: {
-        ...res.cart,
-        items: res.cart.items.map((item) => ({
-          ...item,
-          product: { ...item.product, id: item.product._id.toString() },
-        })),
-      },
-    };
+    return res;
   }
 
   async delete(id: string, options?: DataSourceOptions): Promise<void> {
-    const { acknowledged } = await this.getCollection().deleteOne(
+    return await this._mongoConn.deleteOne(
+      "users",
       { _id: new ObjectId(id) },
-      { session: options?.session }
+      {
+        session: options?.session,
+      }
     );
-
-    if (!acknowledged) {
-      throw new Error("Failed to delete user");
-    }
   }
 }

@@ -1,4 +1,4 @@
-import { ClientSession, ClientSessionEvents } from "mongodb";
+import { ClientSession } from "mongodb";
 
 export class DataSourceOptions {
   session?: ClientSession;

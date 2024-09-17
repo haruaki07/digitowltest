@@ -1,4 +1,5 @@
 export const TYPES = {
+  Config: Symbol("Config"),
   Context: Symbol("Context"),
 
   IFirebaseConnection: Symbol("IFirebaseConnection"),

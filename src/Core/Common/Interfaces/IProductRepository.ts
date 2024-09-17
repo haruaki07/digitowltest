@@ -1,6 +1,6 @@
-import { IdProductEntity } from "@/Domain/Entities/Product";
+import { ProductResponseModel } from "@/Domain/Models/ProductModel";
 
 export interface IProductRepository {
-  getProducts(): Promise<IdProductEntity[]>;
-  findProductById(id: string): Promise<IdProductEntity>;
+  getProducts(): Promise<ProductResponseModel[]>;
+  findProductById(id: string): Promise<ProductResponseModel>;
 }
